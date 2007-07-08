@@ -3,7 +3,7 @@ NAME
     for Catalyst Authentication using DBIx::Class
 
 VERSION
-    This documentation refers to version 0.02.
+    This documentation refers to version 0.10.
 
 SYNOPSIS
         use Catalyst qw/
@@ -32,23 +32,23 @@ SYNOPSIS
                         };
 
         # Log a user in:
-        
-    sub login : Global {
+    
+        sub login : Global {
             my ( $self, $c ) = @_;
-            
-        $c->authenticate({  
+        
+            $c->authenticate({  
                               username => $c->req->params->username,
                               password => $c->req->params->password,
                               status => [ 'registered', 'loggedin', 'active']
                               }))
         }
-        
-    # verify a role 
-        
-    if ( $c->check_user_roles( 'editor' ) ) {
+    
+        # verify a role 
+    
+        if ( $c->check_user_roles( 'editor' ) ) {
             # do editor stuff
         }
-
+    
 DESCRIPTION
     The Catalyst::Plugin::Authentication::Store::DBIx::Class class provides
     access to authentication information stored in a database via
@@ -209,7 +209,7 @@ USAGE
     Searchargs
         The searchargs method of retrieval allows you to specify an arrayref
         containing the two arguments to the search() method from
-        DBIx::Class::Resultset. If provided, all other args are ignored, and
+        DBIx::Class::ResultSet. If provided, all other args are ignored, and
         the search args provided are used directly to locate the user. An
         example will probably make more sense:
 
@@ -243,13 +243,13 @@ USAGE
 
             my $rs = $c->model('MyApp::User')->search({ email => $c->request->params->{'email'} });
                ... # further $rs adjustments
-               
-    if ($c->authenticate({ 
+       
+            if ($c->authenticate({ 
                                    password => $password,
                                    'dbix_class' => {  resultset = $rs }
                                  })) {
                # do successful authentication actions here.
-            }
+            } 
 
         Be aware that the resultset method will not verify that you are
         passing a resultset that is attached to the same user_class as

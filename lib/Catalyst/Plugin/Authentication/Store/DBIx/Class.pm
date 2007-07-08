@@ -4,7 +4,8 @@ use strict;
 use warnings;
 use base qw/Class::Accessor::Fast/;
 
-our $VERSION= "0.02";
+our $VERSION= "0.10";
+
 
 BEGIN {
     __PACKAGE__->mk_accessors(qw/config/);
@@ -80,7 +81,7 @@ Catalyst::Plugin::Authentication::Store::DBIx::Class - A storage class for Catal
 
 =head1 VERSION
 
-This documentation refers to version 0.02.
+This documentation refers to version 0.10.
 
 =head1 SYNOPSIS
 
@@ -299,7 +300,7 @@ are only processed as part of the 'dbix_class' hash
 =item Searchargs
 
 The B<searchargs> method of retrieval allows you to specify an arrayref containing
-the two arguments to the search() method from L<DBIx::Class::Resultset>.  If provided,
+the two arguments to the search() method from L<DBIx::Class::ResultSet>.  If provided,
 all other args are ignored, and the search args provided are used directly to locate
 the user.  An example will probably make more sense:
 

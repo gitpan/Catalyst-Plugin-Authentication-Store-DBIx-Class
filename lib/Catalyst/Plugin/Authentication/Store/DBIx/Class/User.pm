@@ -23,7 +23,15 @@ sub new {
     
 
     if (!exists($self->config->{'id_field'})) {
-        $self->config->{'id_field'} = 'id';
+        my @pks = $self->{'resultset'}->result_source->primary_columns;
+        if ($#pks == 0) {
+            $self->config->{'id_field'} = $pks[0];
+        } else {
+            Catalyst::Exception->throw("user table does not contain a single primary key column - please specify 'id_field' in config!");
+        }
+    }
+    if (!$self->{'resultset'}->result_source->has_column($self->config->{'id_field'})) {
+        Catalyst::Exception->throw("id_field set to " .  $self->config->{'id_field'} . " but user table has no column by that name!");
     }
     
     ## if we have lazyloading turned on - we should not query the DB unless something gets read.
@@ -104,7 +112,10 @@ sub roles {
     
     my @roles = ();
     if (exists($self->config->{'role_column'})) {
-        @roles = split /[ ,\|]+/, $self->get($self->config->{'role_column'});
+        my $role_data = $self->get($self->config->{'role_column'});
+        if ($role_data) { 
+            @roles = split /[ ,\|]+/, $self->get($self->config->{'role_column'});
+        }
         $self->_roles(\@roles);
     } elsif (exists($self->config->{'role_relation'})) {
         my $relation = $self->config->{'role_relation'};
@@ -176,7 +187,7 @@ module.
 
 =head1 VERSION
 
-This documentation refers to version 0.02.
+This documentation refers to version 0.10.
 
 =head1 SYNOPSIS
 
@@ -198,7 +209,7 @@ connected to an underlying DBIx::Class schema object.
 
 Constructor.
 
-=head2 load_user ( $authinfo, $c ) 
+=head2 load ( $authinfo, $c ) 
 
 Retrieves a user from storage using the information provided in $authinfo.
 
@@ -214,6 +225,11 @@ Returns an array of roles associated with this user, if roles are configured for
 
 Returns a serialized user for storage in the session.  Currently, this is the value of the field
 specified by the 'id_field' config variable.
+
+=head2 from_session
+
+Revives a serialized user from storage in the session.  Currently, this uses the serialized data as the
+value of the 'id_field' config variable.
 
 =head2 get ( $fieldname )
 
@@ -234,7 +250,7 @@ None known currently, please email the author if you find any.
 
 =head1 AUTHOR
 
-Jason Kuri (jk@domain.tld)
+Jason Kuri (jayk@cpan.org)
 
 =head1 LICENSE
 

@@ -1,5 +1,13 @@
 Revision history for Catalyst-Plugin-Authentication-Store-DBIx-Class
 
+0.10    2007-07-07 3pm CST
+        Proper handling of missing id_field config (load from primary_key)
+        Throw exception if id_field specified does not exist
+        Full test suite added.  (based loosely on old DBIC store)
+
+0.03    XXX
+        Switch to Module::Install
+
 0.02    2006-12-16 2pm CST
         Rewritten to use proper accessors and clean up to match updated C::P::Authentication class naming
         

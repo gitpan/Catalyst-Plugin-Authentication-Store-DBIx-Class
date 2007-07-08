@@ -1,16 +1,12 @@
-use strict;
-use warnings;
-use ExtUtils::MakeMaker;
+use inc::Module::Install 0.65;
 
-WriteMakefile(
-    NAME                => 'Catalyst::Plugin::Authentication::Store::DBIx::Class',
-    AUTHOR              => 'Jay Kuri <jayk@cpan.org>',
-    VERSION_FROM        => 'lib/Catalyst/Plugin/Authentication/Store/DBIx/Class.pm',
-    ABSTRACT_FROM       => 'lib/Catalyst/Plugin/Authentication/Store/DBIx/Class.pm',
-    PL_FILES            => {},
-    PREREQ_PM => {
-        'Test::More' => 0,
-    },
-    dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean               => { FILES => 'Catalyst-Plugin-Authentication-Store-DBIx-Class-*' },
-);
+name 'Catalyst-Plugin-Authentication-Store-DBIx-Class';
+all_from 'lib/Catalyst/Plugin/Authentication/Store/DBIx/Class.pm';
+
+requires 'Catalyst::Runtime';
+requires 'Catalyst::Plugin::Authentication';
+requires 'Test::More';
+
+auto_install;
+WriteAll;
+
